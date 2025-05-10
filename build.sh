@@ -1,4 +1,4 @@
-rm ././js/bin/*
+rm ./js/bin/*
 
 env GOOS=linux GOARCH=amd64 go build -o ./js/bin/embedcss_x86_linux.o .
 env GOOS=linux GOARCH=arm64 go build -o ./js/bin/embedcss_arm64_linux.o .
