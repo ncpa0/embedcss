@@ -10,7 +10,7 @@ type CompilerOptions struct {
 }
 
 func Parse(code string, options *CompilerOptions) (string, string, error) {
-	containsStyles, _ := regexp.Match(`import\s*{\s*css\s*}\s*from\s*("embedcss"|'embedcss')`, []byte(code))
+	containsStyles, _ := regexp.Match(`import\s*{\s*(\w|,|\s)*\s*css\s*(\w|,|\s)*\s*}\s*from\s*("embedcss"|'embedcss')`, []byte(code))
 	if !containsStyles {
 		return code, "", nil
 	}

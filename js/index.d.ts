@@ -5,7 +5,7 @@ declare type VarsOptions = {
   and?: string;
 };
 
-declare class StyleClass<Variables extends string> {
+declare class StyleClass<Variables extends string = string> {
   classList: string[];
   cname: string;
   constructor(classNames: string);
@@ -26,12 +26,10 @@ declare class StyleClass<Variables extends string> {
    * // or
    * elem.style.cssText = style.vars({ fontColor: 'blue' }).asStyle();
    * // or, apply it globally:
-   * const styleTag = document.createElement('style');
-   * styleTag.textContent = style.vars({ fontColor: 'blue' }).asCss();
-   * document.head.appendChild(styleTag);
+   * style.vars({ fontColor: 'blue' }).apply();
    */
   vars(
-    variables: Record<string, string>,
+    variables: Record<Variables, string>,
     options?: VarsOptions,
   ): {
     /**
@@ -64,4 +62,4 @@ declare class StyleClass<Variables extends string> {
 }
 
 export { StyleClass };
-export declare const css: (strings: TemplateStringsArray, ...args: any[]) => StyleClass;
+export declare const css: <V extends string = string>(strings: TemplateStringsArray, ...args: any[]) => StyleClass<V>;
