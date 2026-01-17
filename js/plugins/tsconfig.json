@@ -1,0 +1,13 @@
+{
+  "include": ["*.mjs"],
+  "exclude": [],
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "rootDir": ".",
+    "outDir": ".",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+  },
+}

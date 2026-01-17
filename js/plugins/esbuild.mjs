@@ -43,9 +43,13 @@ export function EmbedCssPlugin(options = {}) {
       /**
        * @param {OnLoadArgs} args
        * @param {"js" | "jsx" | "ts" | "tsx"} loader
-       * @returns {Promise<OnLoadResult>}
+       * @returns {Promise<OnLoadResult | undefined>}
        */
       async function loader(args, loader) {
+        if (args.path.includes("/node_modules/")) {
+          return;
+        }
+
         ensureCompilerAvailable();
         const content = await fs.readFile(args.path, "utf8");
         const compiled = await compiler.compile(content, {
@@ -91,18 +95,21 @@ export function EmbedCssPlugin(options = {}) {
 
         if (options?.write !== false) {
           let hash = "";
-          if (build.initialOptions?.entryNames?.includes("[hash]")) {
+          let outpath = build.initialOptions?.entryNames != null
+            ? build.initialOptions.entryNames
+            : `${outName}.[ext]`;
+
+          if (outpath.includes("[hash]")) {
             const hasher = crypto.createHash("whirlpool");
             hasher.update(stylesheet);
             hash = hasher.digest("hex");
           }
-          let outpath = build.initialOptions?.entryNames != null
-            ? build.initialOptions.entryNames
-              .replaceAll("[dir]", outdir)
-              .replaceAll("[name]", outName)
-              .replaceAll("[hash]", hash)
-              .replaceAll("[ext]", "css")
-            : `${outName}.css`;
+
+          outpath = outpath
+            .replaceAll("[dir]", outdir)
+            .replaceAll("[name]", outName)
+            .replaceAll("[hash]", hash)
+            .replaceAll("[ext]", "css");
 
           if (build.initialOptions?.entryNames?.includes("[dir]") || path.isAbsolute(outpath)) {
             await fs.writeFile(outpath, stylesheet, "utf-8");

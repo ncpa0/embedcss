@@ -6,6 +6,7 @@ package internal
 import (
 	"embedcss_compiler/logger"
 	"encoding/binary"
+	"fmt"
 	"io"
 	"os"
 	"reflect"
@@ -378,13 +379,9 @@ func NewService() *StdioService {
 }
 
 func (service *StdioService) Start() {
-	isdone := false
 	service.wg.Add(1)
 	service.Command("exit", func(Request) (map[string]interface{}, error) {
-		if isdone {
-			isdone = true
-			service.wg.Done()
-		}
+		os.Exit(0)
 		return nil, nil
 	})
 
@@ -393,6 +390,7 @@ func (service *StdioService) Start() {
 			logger.Debugf("sending packet")
 
 			if _, err := os.Stdout.Write(packet); err != nil {
+				fmt.Println("Error: ", err)
 				os.Exit(1) // I/O error
 			}
 			service.wg.Done()
