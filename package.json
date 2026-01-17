@@ -31,7 +31,9 @@
     }
   },
   "files": [
-    "js"
+    "js",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "./build.sh && bun run build:types",
